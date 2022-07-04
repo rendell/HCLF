@@ -1,0 +1,122 @@
+---
+title: "HCLF"
+format: html
+editor: visual
+---
+
+```{r, echo=FALSE, reval=FALSE}
+# Install and load packages ---------------
+packages <- c(
+  "tidyverse",
+  "tidymodels",
+  "haven",
+  "ggrepel",
+  "directlabels",
+  "plotrix",
+  "gg_themes"
+)
+
+# Change to install = TRUE to install the required packages
+pacman::p_load(packages, character.only = TRUE, install = FALSE)
+
+# Load an example dataset ---------------
+# https://openknowledge.worldbank.org/handle/10986/25030
+data <- read.csv("https://raw.githubusercontent.com/rendell/HCLF/main/results.csv")
+
+data <- data %>%
+  filter(treatment_locality == 1) %>%
+  mutate(enrolled = factor(enrolled)) %>%
+  group_by(enrolled, round) %>%
+  summarise_at("health_expenditures", list(~ mean(.), ~ sd(.))) %>%
+  ungroup() %>%
+  mutate(label = ifelse(enrolled == 1, "Treatment", "Control"))
+
+h_line <- 3
+```
+
+# Introduction
+
+# Overall results
+
+-   The mental resilience assessment results suggest statistically significant results following the intervention. An increase of 2.3% is noted in the resilience of the test group following the intervention. While the results remain static for the control group that did not partake in the intervention program.
+
+```{r, echo=FALSE, eval=FALSE}
+ggplot(data, aes(x = factor(round), y = mean, group = enrolled, colour = enrolled)) +
+  geom_pointrange(aes(ymin = mean - sd, ymax = mean + sd), position = position_dodge(width = 0.03)) + 
+  geom_dl(aes(label = label), method = list(dl.trans(x = x + 0.2), "last.points")) +
+  geom_line(position = position_dodge(width = 0.03)) +
+  theme_classic() +
+  scale_x_discrete(labels = c("Before", "After")) +
+  ylab("Resilience score (mean and 1SD error bar)") +
+  xlab("") +
+  theme(
+    axis.text = element_text(size = 12),
+    axis.title.y = element_text(size = 14),
+    legend.title = element_blank(),
+    legend.position = "none"
+    )+ 
+  ylim(2.3,4.32)+
+  geom_hline(yintercept = 3, linetype = "dashed")+
+  geom_hline(yintercept = 4.31, linetype = "dashed")
+```
+
+# Plot gender results
+
+-   Interestingly, upon dis aggregation of the results, it becomes apparent that there are marked difference between the results for female students versus male students.
+-   It is particularly striking that the female average is constant and is below the level of what the resilience scale methodology considers "Normal resilience".
+
+| Group | Gender | Average | Interpretation    | Percentage change |
+|:------|:-------|:-------:|-------------------|:-----------------:|
+| Pre   | Male   |  3.35   | Normal resilience |                   |
+| Pre   | Female |  2.92   | Low resilience    |                   |
+| Post  | Male   |  3.39   | Normal resilience |       1.1%        |
+| Post  | Female |  2.92   | Low resilience    |       0.0%        |
+
+```{r, echo=FALSE, eval=FALSE}
+#Pre Male: 3.35
+#Pre Female: 2.92
+#Post Male: 3.39
+#Post Female: 2.92
+
+HCLF_data%>%
+  filter(Group=="Pre", Gender=="Male")%>%
+  summarise(avg=mean(s_average))
+
+HCLF_data%>%
+  filter(Group=="Pre", Gender=="Female")%>%
+  summarise(avg=mean(s_average))
+
+HCLF_data%>%
+  filter(Group=="Post", Gender=="Male")%>%
+  summarise(avg=mean(s_average))
+
+HCLF_data%>%
+  filter(Group=="Post", Gender=="Female")%>%
+  summarise(avg=mean(s_average))
+
+Group       <- c("Baseline","Baseline","Post intervetion","Post intervetion")
+Gender      <- c("Male","Female","Male","Female")
+Observation <- c(3.35,2.92,3.39,2.92)
+
+df_gender <- data.frame(Group, Gender, Observation)
+
+ggplot(df_gender, aes(x = Gender, y = Observation, fill = Group)) +
+  geom_col(position = "dodge")+
+  theme_classic()+
+  ylim(NA,3.5)+
+  scale_fill_manual(values=c(
+                             "lightblue",
+                             "darkblue"))
+```
+
+# Methodology
+
+-   The calculations benefited from a survey conducted between X and X.
+
+-   Surveys were distributed to X schools in both Papiamento and English.
+
+-   Necessary precautions were taken to ensure the anonymity of respondents.
+
+-   A baseline assessment was conducted prior to intervention as well as following the intervention program.
+
+-   The method of difference-in-difference was utilized to evaluate the impact of intervention.
