@@ -38,6 +38,14 @@ h_line <- 3
 
 # Overall results
 
+## Descriptives
+### Table age
+```{r}
+table(HCLF_data$Age)
+```
+
+
+
 -   The mental resilience assessment results suggest statistically significant results following the intervention. An increase of 2.3% is noted in the resilience of the test group following the intervention. While the results remain static for the control group that did not partake in the intervention program.
 
 ```{r, echo=FALSE, eval=FALSE}
