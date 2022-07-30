@@ -1,5 +1,5 @@
 ---
-title: "HCLF"
+title: "The impact of XX program on child xx: Evidence from schools in San Nicolas"
 format: html
 editor: visual
 ---
@@ -19,32 +19,68 @@ packages <- c(
 # Change to install = TRUE to install the required packages
 pacman::p_load(packages, character.only = TRUE, install = FALSE)
 
-# Load an example dataset ---------------
+# Example used
 # https://openknowledge.worldbank.org/handle/10986/25030
 data <- read.csv("https://raw.githubusercontent.com/rendell/HCLF/main/results.csv")
 
-data <- data %>%
-  filter(treatment_locality == 1) %>%
-  mutate(enrolled = factor(enrolled)) %>%
-  group_by(enrolled, round) %>%
-  summarise_at("health_expenditures", list(~ mean(.), ~ sd(.))) %>%
-  ungroup() %>%
-  mutate(label = ifelse(enrolled == 1, "Treatment", "Control"))
-
-h_line <- 3
+# HCLF data due to data privacy is not on github, but on the local environment.
 ```
 
 # Introduction
 
-# Overall results
+Is it possible to stimulate XX by offering children resiliency training at schools?
 
-## Descriptives
+Using an experiment in San Nicolas, Aruba, this note shows that providing targeted training programs have a measurable impact on the children resiliency scores, but only when XX.
+
+The impacts on the resiliency scores are marginally positive, and appear to be cost-effective.
+
+Impact evaluation
+
+Evaluating the effectiveness in .....
+
+Rendell de Kort, Development Economist
+
+Cornerstone Economics
+
+7/3/2022
+
+## Context
+
+The RCT took place in San Nicolas at X schools. According to the Central Bureau of Statistics, the average income of households is San Nicolas is XX percent lower than the national average, indicative of inadequate job creation and lower social- economic prospects.
+
+Home to significant Venezuelan migrant population.
+
+Educational intervention is well suited to impact evaluation.
+
+Intervention was applied at school.
+
+Carefully designed for rigerous impact evaluation: phased in with randomized control trial (RCT).
+
+Randomization means that we can easily compare outcomes between groups and interpret difference as impact.
+
+-   Compared the outcome in schools in San Nicolas with the program to schools without the program.
+
+## Intervention
+
+Between Sept 2021 and October 2021, XX children between the ages of X to X of our study sample were assigned to two intervention groups or to a control group.The design of the experiment is further outlined in the final chapter titled 'Evaluation design'.
+
+The intervention group received a training on . The training was organized and facilitated by HCLF. It aimed at
+
+The training covered X areas . Each module included a series of videos, exercises, and guided discussions.
+
+## Evidence
+
+Small but significant impact
+
+# Results
+
+## Descriptive
+
 ### Table age
+
 ```{r}
 table(HCLF_data$Age)
 ```
-
-
 
 -   The mental resilience assessment results suggest statistically significant results following the intervention. An increase of 2.3% is noted in the resilience of the test group following the intervention. While the results remain static for the control group that did not partake in the intervention program.
 
@@ -117,7 +153,15 @@ ggplot(df_gender, aes(x = Gender, y = Observation, fill = Group)) +
                              "darkblue"))
 ```
 
-# Methodology
+# Conclusion
+
+Increase use of rigorously designed studies to continue to evaluate impact.
+
+Opportunity: HCLF willing to experiment with innovative potential solutions.
+
+Theory of change: appealing to teacher motivation to track progress.
+
+# Evaluation design
 
 -   The calculations benefited from a survey conducted between X and X.
 
@@ -127,4 +171,27 @@ ggplot(df_gender, aes(x = Gender, y = Observation, fill = Group)) +
 
 -   A baseline assessment was conducted prior to intervention as well as following the intervention program.
 
--   The method of difference-in-difference was utilized to evaluate the impact of intervention.
+-   The method of difference-in-difference was utilized to evaluate the impact of intervention.--- title: "HCLF" format: html editor: visual ---
+
+```{r, echo=FALSE, reval=FALSE}
+# Install and load packages ---------------
+packages <- c(
+  "tidyverse",
+  "tidymodels",
+  "haven",
+  "ggrepel",
+  "directlabels",
+  "plotrix",
+  "gg_themes"
+)
+
+# Change to install = TRUE to install the required packages
+pacman::p_load(packages, character.only = TRUE, install = FALSE)
+
+# Load an example dataset ---------------
+# https://openknowledge.worldbank.org/handle/10986/25030
+data <- read.csv("https://raw.githubusercontent.com/rendell/HCLF/main/results.csv")
+
+```
+
+# 
