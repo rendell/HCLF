@@ -1,5 +1,5 @@
 ---
-title: "The impact of XX program on child xx: Evidence from schools in San Nicolas"
+title: "The impact of youth mental resilience interventions: Evidence from schools in San Nicolas"
 format: html
 editor: visual
 ---
@@ -24,11 +24,14 @@ pacman::p_load(packages, character.only = TRUE, install = FALSE)
 data <- read.csv("https://raw.githubusercontent.com/rendell/HCLF/main/results.csv")
 
 # HCLF data due to data privacy is not on github, but on the local environment.
+
+# colour code purple: #79288C
+ 
 ```
 
 # Introduction
 
-Is it possible to stimulate XX by offering children resiliency training at schools?
+Heart Centered Leadership foundation (HCLF) in 2021 initiated the 'Curason pa Curason' program aiming to bolster mental resilience of youth and young adults by engaging the target group at schools and normalizing conversations around the topic.
 
 Using an experiment in San Nicolas, Aruba, this note shows that providing targeted training programs have a measurable impact on the children resiliency scores, but only when XX.
 
@@ -76,7 +79,7 @@ Small but significant impact
 
 ## Descriptive
 
-### Table age
+## Table age
 
 ```{r}
 table(HCLF_data$Age)
@@ -104,7 +107,7 @@ ggplot(data, aes(x = factor(round), y = mean, group = enrolled, colour = enrolle
   geom_hline(yintercept = 4.31, linetype = "dashed")
 ```
 
-# Plot gender results
+## Plot gender results
 
 -   Interestingly, upon dis aggregation of the results, it becomes apparent that there are marked difference between the results for female students versus male students.
 -   It is particularly striking that the female average is constant and is below the level of what the resilience scale methodology considers "Normal resilience".
@@ -191,7 +194,6 @@ pacman::p_load(packages, character.only = TRUE, install = FALSE)
 # Load an example dataset ---------------
 # https://openknowledge.worldbank.org/handle/10986/25030
 data <- read.csv("https://raw.githubusercontent.com/rendell/HCLF/main/results.csv")
-
 ```
-
+ 
 # 
