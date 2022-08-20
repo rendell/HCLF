@@ -156,6 +156,63 @@ ggplot(df_gender, aes(x = Gender, y = Observation, fill = Group)) +
                              "darkblue"))
 ```
 
+## Likert
+```{r}
+mydf <- HCLF_data%>%
+  filter(Group=='Pre') %>%
+  select(S1,S2,S3,S4,S5,S6)
+
+colnames(mydf) <- c("I tend to bounce back quickly after hard times",
+           " I have a hard time making it through stressful events",
+           "It does not take me long to recover from a stressful event",
+           "It is hard for me to snap back when something bad happens",
+           "I usually come through difficult times with little trouble",
+           "I tend to take a long time to get over setbacks in my life"
+           )
+
+plot_likert(
+  mydf,
+  grid.range = c(1.2, 1.4),
+  expand.grid = FALSE,
+  values = "sum.outside",
+  show.prc.sign = TRUE,
+  cat.neutral = 3 
+)+                                                  # Modify labels
+  scale_color_manual(labels = c("Strongly Disagree",
+                                "Disagree",
+                                "Neutral",
+                                "Agree",
+                                "Strongly Agree"
+                                ))+
+theme(axis.text.x=element_blank(),
+      axis.ticks.x=element_blank())
+```
+
+
+## Family composition
+```{r}
+table(HCLF_data$Please.choose.which.one.applies.I.live)
+```
+
+## Statement 1
+*Requires cleaning*
+```{r}
+table(HCLF_data$Information.received.was.useful)
+```
+
+## Statement 2
+*Requires cleaning*
+```{r}
+table(HCLF_data$Information.received.was.useful2.important)
+```
+
+## Statement 3
+*requires cleaning*
+```{r}
+table(HCLF_data$The.information.received.encouraged.me.to.improve)
+```
+
+
 # Conclusion
 
 Increase use of rigorously designed studies to continue to evaluate impact.
@@ -197,3 +254,4 @@ data <- read.csv("https://raw.githubusercontent.com/rendell/HCLF/main/results.cs
 ```
  
 # 
+
