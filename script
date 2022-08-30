@@ -191,7 +191,7 @@ theme(axis.text.x=element_blank(),
 
 ## Family composition
 ```{r}
-table(HCLF_data$Please.choose.which.one.applies.I.live)
+family<- table(HCLF_data$Please.choose.which.one.applies.I.live)
 ```
 
 ## Statement 1
