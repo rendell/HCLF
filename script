@@ -78,6 +78,11 @@ Small but significant impact
 # Results
 
 ## Descriptive
+```{r}
+table(HCLF_data$School,HCLF_data$Group)
+```
+
+
 
 ## Table age
 
@@ -115,143 +120,69 @@ ggplot(data, aes(x = factor(round), y = mean, group = enrolled, colour = enrolle
 | Group | Gender | Average | Interpretation    | Percentage change |
 |:------|:-------|:-------:|-------------------|:-----------------:|
 | Pre   | Male   |  3.35   | Normal resilience |                   |
-| Pre   | Female |  2.92   | Low resilience    |                   |
-| Post  | Male   |  3.39   | Normal resilience |       1.1%        |
-| Post  | Female |  2.92   | Low resilience    |       0.0%        |
+| Pre   | Female |  2.94   | Low resilience    |                   |
+| Post  | Male   |  3.35   | Normal resilience |       1.1%        |
+| Post  | Female |  3.01   | Normal resilience |       2.6%       |
 
 ```{r, echo=FALSE, eval=FALSE}
-#Pre Male: 3.35
-#Pre Female: 2.92
-#Post Male: 3.39
-#Post Female: 2.92
+#Pre Male: 3.353
+#Pre Female: 2.936
+#Post Male: 3.353
+#Post Female: 3.011
+# Pre total: 3.114
+# Post total: 3.180
 
 HCLF_data%>%
+  filter(Bucket=="test")%>%
   filter(Group=="Pre", Gender=="Male")%>%
   summarise(avg=mean(s_average))
 
+# test pre female: 2.936
 HCLF_data%>%
+  filter(Bucket=="test")%>%
   filter(Group=="Pre", Gender=="Female")%>%
   summarise(avg=mean(s_average))
 
 HCLF_data%>%
+  filter(Bucket=="test")%>%
   filter(Group=="Post", Gender=="Male")%>%
   summarise(avg=mean(s_average))
 
+# test post female: 3.011
 HCLF_data%>%
+  filter(Bucket=="test")%>%
   filter(Group=="Post", Gender=="Female")%>%
   summarise(avg=mean(s_average))
 
-Group       <- c("Baseline","Baseline","Post intervetion","Post intervetion")
-Gender      <- c("Male","Female","Male","Female")
-Observation <- c(3.35,2.92,3.39,2.92)
+# Total - Pre - treatment: 3.115
+HCLF_data%>%
+  filter(Bucket=="test")%>%
+  filter(Group=="Pre")%>%
+  summarise(avg=mean(s_average))
 
-df_gender <- data.frame(Group, Gender, Observation)
+# Total - Pre - control:3.144
+HCLF_data%>%
+  filter(Bucket=="control")%>%
+  filter(Group=="Pre")%>%
+  summarise(avg=mean(s_average))
 
-ggplot(df_gender, aes(x = Gender, y = Observation, fill = Group)) +
-  geom_col(position = "dodge")+
-  theme_classic()+
-  ylim(NA,3.5)+
-  scale_fill_manual(values=c(
-                             "lightblue",
-                             "darkblue"))
+# Total - Post - treatment: 3.180
+HCLF_data%>%
+  filter(Bucket=="test")%>%
+  filter(Group=="Post")%>%
+  summarise(avg=mean(s_average))
+
+# Total - Post - control: 3.153
+HCLF_data%>%
+  filter(Bucket=="control")%>%
+  filter(Group=="Post")%>%
+  summarise(avg=mean(s_average))
 ```
 
-## Likert
 ```{r}
-mydf <- HCLF_data%>%
-  filter(Group=='Pre') %>%
-  select(S1,S2,S3,S4,S5,S6)
+(3.391-3.353)/3.353 # Male: 1.1%
+(3.011- 2.936)/2.936 # Female percentage change: 2.6%
+(3.180-3.115)/3.115 # total % change treatment: 2.1%
 
-colnames(mydf) <- c("I tend to bounce back quickly after hard times",
-           " I have a hard time making it through stressful events",
-           "It does not take me long to recover from a stressful event",
-           "It is hard for me to snap back when something bad happens",
-           "I usually come through difficult times with little trouble",
-           "I tend to take a long time to get over setbacks in my life"
-           )
-
-plot_likert(
-  mydf,
-  grid.range = c(1.2, 1.4),
-  expand.grid = FALSE,
-  values = "sum.outside",
-  show.prc.sign = TRUE,
-  cat.neutral = 3 
-)+                                                  # Modify labels
-  scale_color_manual(labels = c("Strongly Disagree",
-                                "Disagree",
-                                "Neutral",
-                                "Agree",
-                                "Strongly Agree"
-                                ))+
-theme(axis.text.x=element_blank(),
-      axis.ticks.x=element_blank())
 ```
-
-
-## Family composition
-```{r}
-family<- table(HCLF_data$Please.choose.which.one.applies.I.live)
-```
-
-## Statement 1
-*Requires cleaning*
-```{r}
-table(HCLF_data$Information.received.was.useful)
-```
-
-## Statement 2
-*Requires cleaning*
-```{r}
-table(HCLF_data$Information.received.was.useful2.important)
-```
-
-## Statement 3
-*requires cleaning*
-```{r}
-table(HCLF_data$The.information.received.encouraged.me.to.improve)
-```
-
-
-# Conclusion
-
-Increase use of rigorously designed studies to continue to evaluate impact.
-
-Opportunity: HCLF willing to experiment with innovative potential solutions.
-
-Theory of change: appealing to teacher motivation to track progress.
-
-# Evaluation design
-
--   The calculations benefited from a survey conducted between X and X.
-
--   Surveys were distributed to X schools in both Papiamento and English.
-
--   Necessary precautions were taken to ensure the anonymity of respondents.
-
--   A baseline assessment was conducted prior to intervention as well as following the intervention program.
-
--   The method of difference-in-difference was utilized to evaluate the impact of intervention.--- title: "HCLF" format: html editor: visual ---
-
-```{r, echo=FALSE, reval=FALSE}
-# Install and load packages ---------------
-packages <- c(
-  "tidyverse",
-  "tidymodels",
-  "haven",
-  "ggrepel",
-  "directlabels",
-  "plotrix",
-  "gg_themes"
-)
-
-# Change to install = TRUE to install the required packages
-pacman::p_load(packages, character.only = TRUE, install = FALSE)
-
-# Load an example dataset ---------------
-# https://openknowledge.worldbank.org/handle/10986/25030
-data <- read.csv("https://raw.githubusercontent.com/rendell/HCLF/main/results.csv")
-```
- 
-# 
 
