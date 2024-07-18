@@ -1,0 +1,62 @@
+---
+title: "HCLF 2024"
+format: pdf
+editor: visual
+---
+
+```{r}
+library(readr)
+HCLF_response_data <- read_csv("HCLF/HCLF_response_data.csv")
+```
+
+```{r}
+# Rename columns 9 to 20
+names(HCLF_response_data)[9:20] <- paste0("response_var_", 1:12)
+```
+
+
+```{r}
+# Create a sample vector with responses
+responses <- c("Strongly Agree", "Agree", "Neutral", "Disagree", "Strongly Disagree", "Neutral", "Agree", "Disagree")
+
+# Recode the responses to numerical values
+numeric_values <- c("Strongly Agree" = 5, "Agree" = 4, "Neutral" = 3, "Disagree" = 2, "Strongly Disagree" = 1)
+
+# Assuming 'HCLF_response_data' is your dataframe
+# 'columns_to_recode' contains the column names you want to recode
+columns_to_recode <- c("response_var_1", 
+                       "response_var_2", 
+                       "response_var_3", 
+                       "response_var_4",
+                       "response_var_5",
+                       "response_var_6",
+                       "response_var_7",
+                       "response_var_8",
+                       "response_var_9",
+                       "response_var_10"
+                       ) # Include up to response_var_10
+
+# A custom function to recode numerical responses into ordered factors
+likert_recode <- function(x) {
+  y <- ifelse(is.na(x), NA,
+              ifelse(x == 1, "Strongly disagree",
+                     ifelse(x == 2, "Disagree",
+                            ifelse(x == 3, "Neutral",
+                                 ifelse(x == 4, "Agree", "Strongly agree")))))
+  
+  y <- factor(y, levels = c("Strongly disagree", "Disagree","Neutral", "Agree", "Strongly agree"))
+  
+  return(y)
+}
+
+HCLF_response_data[, columns_to_recode] <- lapply(HCLF_response_data[, columns_to_recode], likert_recode)
+
+
+
+HCLF_response_data$response_var_12 <- 
+```
+
+```{r}
+
+```
+
