@@ -1,3 +1,4 @@
+
 ---
 title: "HCLF 2024"
 format: pdf
@@ -6,6 +7,8 @@ editor: visual
 
 ```{r}
 library(readr)
+library(dplyr)
+library(likert)
 HCLF_response_data <- read_csv("HCLF/HCLF_response_data.csv")
 ```
 
@@ -17,7 +20,7 @@ names(HCLF_response_data)[9:20] <- paste0("response_var_", 1:12)
 
 ```{r}
 # Create a sample vector with responses
-responses <- c("Strongly Agree", "Agree", "Neutral", "Disagree", "Strongly Disagree", "Neutral", "Agree", "Disagree")
+responses <- c("Strongly Agree", "Agree", "Neutral", "Disagree", "Strongly Disagree")
 
 # Recode the responses to numerical values
 numeric_values <- c("Strongly Agree" = 5, "Agree" = 4, "Neutral" = 3, "Disagree" = 2, "Strongly Disagree" = 1)
@@ -36,6 +39,9 @@ columns_to_recode <- c("response_var_1",
                        "response_var_10"
                        ) # Include up to response_var_10
 
+# I think there is an error here because the data suddenly changes when this is applied
+HCLF_response_data[, columns_to_recode] <- lapply(HCLF_response_data[, columns_to_recode], likert_recode)
+
 # A custom function to recode numerical responses into ordered factors
 likert_recode <- function(x) {
   y <- ifelse(is.na(x), NA,
@@ -44,17 +50,53 @@ likert_recode <- function(x) {
                             ifelse(x == 3, "Neutral",
                                  ifelse(x == 4, "Agree", "Strongly agree")))))
   
-  y <- factor(y, levels = c("Strongly disagree", "Disagree","Neutral", "Agree", "Strongly agree"))
+y <- factor(y, levels = c("Strongly disagree", "Disagree","Neutral", "Agree", "Strongly agree"))
   
   return(y)
 }
 
-HCLF_response_data[, columns_to_recode] <- lapply(HCLF_response_data[, columns_to_recode], likert_recode)
+
+# Transform the items into factors and save the data set as a likert object
+items_likert<- HCLF_response_data %>% 
+  select(response_var_1,
+         response_var_2,
+         response_var_3,
+         response_var_4,
+         response_var_5,
+         response_var_6,
+         response_var_7,
+         response_var_8,
+         response_var_9,
+         response_var_10
+         ) %>%
+  mutate_all(likert_recode) %>%
+  likert()
+
 
 
 
 HCLF_response_data$response_var_12 <- 
 ```
+
+
+# Matrix questions (based on 1=strongly disagree to 5=strongly agree)
+On the whole, I am satisfied with myself 
+At times I think I am no good at all
+I feel that I have a number of good 
+I am able to do things as well as most other people 
+I feel I do not have much to be proud of 
+I certainly feel useless at times 
+I feel that I'm a person of worth, at least on an equal plane with others 
+I wish I could have more respect for myself 
+All in all, I am inclined to feel that I am a failure 
+I take a positive attitude toward myself 
+
+
+On a scale from 1 to 5, how would you rate your self-esteem at this moment?   
+
+ On a scale from 1 to 5, how confident were you in your ability to cope with challenging situations 
+ 
+
 
 ```{r}
 
